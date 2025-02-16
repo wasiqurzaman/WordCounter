@@ -2,20 +2,27 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"io"
 	"os"
 )
 
 func main() {
+	lines := flag.Bool("l", false, "Count lines") // Defining a boolean flag -l to count lines instead of words
 
-	fmt.Println(count(os.Stdin))
+	flag.Parse() // Parsing the flags provided by the user
+
+	fmt.Println(count(os.Stdin, *lines))
 }
 
-func count(r io.Reader) int {
+func count(r io.Reader, countLines bool) int {
 	scanner := bufio.NewScanner(r) // A scanner is used to read text from a Reader (such as files)
 
-	scanner.Split(bufio.ScanWords) // Define the scanner split type to words (default is split by lines)
+	if !countLines {
+		// If the countLines flag is not set, we want to count words
+		scanner.Split(bufio.ScanWords) // Define the scanner split type to words (default is split by lines)
+	}
 
 	wc := 0 // counter
 
